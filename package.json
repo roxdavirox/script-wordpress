@@ -1,0 +1,16 @@
+{
+  "name": "script-wordpress",
+  "version": "1.0.0",
+  "description": "script para controlar form no wordpress",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "author": "Davi Roox",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
+}
