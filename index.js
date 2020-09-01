@@ -9,7 +9,7 @@ function getDataRequest() {
 
   var items = document.getElementsByClassName('item-select');
   var itemsId = [];
-  for(var i = 0; i < docs.length; i++) {
+  for(var i = 0; i < items.length; i++) {
     itemsId.push(items[i].children[items[i].selectedIndex].id);
   }
   
@@ -26,15 +26,19 @@ function getDataRequest() {
   console.log('size', size);
   console.log('itemsId', itemsId);
 
-  return { quantity, size, itemsId, person, productName };
+  const dataRequest = { quantity, size, itemsId, person, productName };
+  console.log('dataRequest', dataRequest);
+  return dataRequest;
 }
 
 function updatePriceRequest() {
-  var theUrl = 'https://mktp.herokuapp.com/form/quote';
-  let data = getDataRequest();
+  var url = 'http://localhost:3001/form/quote';
+  console.log('updatePriceRequest', url);
+  let { defaultItems, ...rest } = state.json;
+  let data = { defaultItems, ...getDataRequest() };
   axios({ 
     method: 'POST', 
-    url: theUrl, 
+    url, 
     data 
   })
   .then(res => {
@@ -109,7 +113,7 @@ function clearPrice() {
 }
 
 function hideForm() {
-  state = { formVisible: false }
+  state = { formVisible: false, ...state }
   
   var orcamentoInputs = document.getElementsByClassName('orcamento-inputs');
   for(var i = 0; i < orcamentoInputs.length; i++){
@@ -118,6 +122,7 @@ function hideForm() {
 }
 
 function updatePriceEvent(e) {
+  console.log('updatePriceEvent state', state);
   e.preventDefault();
   if (state.formVisible) return;
   clearPrice();
@@ -142,8 +147,8 @@ function getUpdatedComponent(divElement, optionId, selectedItemId) {
   for(var i = 0; i < selectChildren.children.length; i++) {
     itemsId.push(selectChildren.children[i].getAttribute('id'))
   }
-  let json = JSON.parse(document.getElementsByClassName('sku')[0].innerText);
-  let { defaultItems, ...rest } = json;
+  
+  let { defaultItems, ...rest } = state.json;
   var data = {
     optionId,
     selectedItemId,
@@ -160,7 +165,13 @@ function getUpdatedComponent(divElement, optionId, selectedItemId) {
 
 function updateForm(e) {
   e.preventDefault();
-  // if (state.formVisible) return;
+  if (state.formVisible) return;
+  updatePriceEvent(e);
+  if (e.target.className !== 'item-select') {
+    console.log('evento chamado por outro elemento != item-select');
+    return;
+  }
+  console.log('e.target', e.target);
   var unit = e.target.children[e.target.selectedIndex].getAttribute('_unit');
   var showUnitField = e.target.children[e.target.selectedIndex].getAttribute('_showunitfield');
   var optionId = e.target.children[e.target.selectedIndex].getAttribute('_optionid');
@@ -176,9 +187,9 @@ function updateForm(e) {
     .then(() => {
       selectedDiv.onchange = e => {
       updateForm(e);
-      updatePriceEvent(e);
-    }})
-    .then(() => console.log('component response'));
+    }
+  });
+  loadInputEvents();
 }
 
 function validateEmail(email) {
@@ -369,8 +380,60 @@ function loadFormEvents() {
   for(var i = 0; i < items.length; i++) {
     items[i].onchange = e => {
       updateForm(e);
-      updatePriceEvent(e);
+      // updatePriceEvent(e);
     };
+  }
+
+  loadInputEvents();
+}
+
+function loadInputEvents() {
+  var inputQuantityList = document.querySelectorAll('[id=input-unit-quantity]');
+  for(var i = 0; i < inputQuantityList.length; i++) {
+    inputQuantityList[i].onchange = e => {
+      if (!e.target) return;
+      console.log('e.target.value', e.target.value);
+      let itemId = e.target.getAttribute('_itemid');
+      console.log('itemId', itemId);
+      state.json.defaultItems[itemId] = {
+        quantity: e.target.value,
+        ...state.json.defaultItems[itemId]
+      };
+      console.log('state', state);
+      updateForm(e);
+    }
+  }
+
+  var inputSizeXList = document.querySelectorAll('[id=input-unit-x]');
+  for(var i = 0; i < inputSizeXList.length; i++) {
+    inputSizeXList[i].onchange = e => {
+      if (!e.target) return;
+      console.log('e.target.value', e.target.value);
+      let itemId = e.target.getAttribute('_itemid');
+      console.log('itemId', itemId);
+      state.json.defaultItems[itemId] = {
+        x: e.target.value,
+        ...state.json.defaultItems[itemId]
+      };
+      console.log('state', state);
+      updateForm(e);
+    }
+  }
+
+  var inputSizeXList = document.querySelectorAll('[id=input-unit-y]');
+  for(var i = 0; i < inputSizeXList.length; i++) {
+    inputSizeXList[i].onchange = e => {
+      if (!e.target) return;
+      console.log('e.target.value', e.target.value);
+      let itemId = e.target.getAttribute('_itemid');
+      console.log('itemId', itemId);
+      state.json.defaultItems[itemId] = {
+        y: e.target.value,
+        ...state.json.defaultItems[itemId],
+      };
+      console.log('state', state);
+      updateForm(e);
+    }
   }
 }
 
@@ -380,8 +443,7 @@ function setFormHTML(data) {
 }
 
 function loadForm() {
-  let json = JSON.parse(document.getElementsByClassName('sku')[0].innerText);
-  let { productId, ...data } = json;
+  let { productId, ...data } = state.json;
   let url = `http://localhost:3001/form/${productId}`;
 	axios({ 
       method: 'POST', 
@@ -396,5 +458,17 @@ function loadForm() {
 		.then(setFormHTML)
 		.then(loadFormEvents);
 }
-var state = { formVisible: true, unitPrice: 0, totalPrice: 0 }
+
+function createState() {
+  let json = JSON.parse(document.getElementsByClassName('sku')[0].innerText);
+
+  return {
+    formVisible: true,
+    unitPrice: 0,
+    totalPrice: 0,
+    json,
+  }
+}
+
+var state = createState();
 loadForm()
