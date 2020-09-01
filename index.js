@@ -142,10 +142,13 @@ function getUpdatedComponent(divElement, optionId, selectedItemId) {
   for(var i = 0; i < selectChildren.children.length; i++) {
     itemsId.push(selectChildren.children[i].getAttribute('id'))
   }
+  let json = JSON.parse(document.getElementsByClassName('sku')[0].innerText);
+  let { defaultItems, ...rest } = json;
   var data = {
     optionId,
     selectedItemId,
-    itemsId
+    itemsId,
+    defaultItems
   };
   let url = `http://localhost:3001/form/select`;
 	return axios({ 
