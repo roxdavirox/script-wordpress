@@ -7,10 +7,10 @@ function getDataRequest() {
     var size = JSON.parse(sizeSelect.children[sizeSelect.selectedIndex].getAttribute('_size'));
   }
 
-  var docs = document.getElementsByClassName('item-select');
+  var items = document.getElementsByClassName('item-select');
   var itemsId = [];
   for(var i = 0; i < docs.length; i++) {
-    itemsId.push(docs[i].children[docs[i].selectedIndex].id);
+    itemsId.push(items[i].children[items[i].selectedIndex].id);
   }
   
   var name = document.getElementById('name').value;
@@ -47,7 +47,7 @@ function updatePriceRequest() {
     state.unitPrice = res.data.unitPrice;
     var _total = parseFloat(total).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     var _unitPrice = parseFloat(state.unitPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    document.getElementsByClassName('woocommerce-Price-amount amount')[0].innerText = `${_total} (${_unitPrice}/unit)`;
+    document.getElementsByClassName('elementor-widget-woocommerce-product-price')[0].children[0].children[0].innerText = `${_total} (${_unitPrice}/unit)`;
   });
 }
 
@@ -105,7 +105,7 @@ function formata(value, mask) {
 }
 
 function clearPrice() {
-  document.getElementsByClassName('woocommerce-Price-amount amount')[0].innerText = `R$ 0,00`;
+  document.getElementsByClassName('elementor-widget-woocommerce-product-price')[0].children[0].children[0].innerText = `Calculando...`;
 }
 
 function hideForm() {
@@ -122,6 +122,60 @@ function updatePriceEvent(e) {
   if (state.formVisible) return;
   clearPrice();
   updatePriceRequest();
+}
+
+function getDivByOptionId(optionId) {
+  var divs = document.querySelectorAll('[_optionid]');
+  
+  for(var i = 0; i < divs.length; i++) {
+    if (divs[i].getAttribute('_optionid') === optionId) 
+      return divs[i];
+  }
+  return false;
+}
+
+function getUpdatedComponent(divElement, optionId, selectedItemId) {
+  console.log('divElement', divElement);
+  let selectChildren = divElement.children[1].children[0].children[0];
+  console.log('selectChildren', selectChildren);
+  var itemsId = [];
+  for(var i = 0; i < selectChildren.children.length; i++) {
+    itemsId.push(selectChildren.children[i].getAttribute('id'))
+  }
+  var data = {
+    optionId,
+    selectedItemId,
+    itemsId
+  };
+  let url = `http://localhost:3001/form/select`;
+	return axios({ 
+    method: 'POST', 
+    url, 
+    data
+  });
+}
+
+function updateForm(e) {
+  e.preventDefault();
+  // if (state.formVisible) return;
+  var unit = e.target.children[e.target.selectedIndex].getAttribute('_unit');
+  var showUnitField = e.target.children[e.target.selectedIndex].getAttribute('_showunitfield');
+  var optionId = e.target.children[e.target.selectedIndex].getAttribute('_optionid');
+  var selectedItemId = e.target.children[e.target.selectedIndex].getAttribute('id');
+  console.log('selectedItemId', selectedItemId);
+  console.log('showUnitField', showUnitField);
+  
+  console.log('unit', unit);
+  let selectedDiv = getDivByOptionId(optionId);
+  getUpdatedComponent(selectedDiv, optionId, selectedItemId)
+    .then(res => res.data.html)
+    .then(html => selectedDiv.innerHTML = html)
+    .then(() => {
+      selectedDiv.onchange = e => {
+      updateForm(e);
+      updatePriceEvent(e);
+    }})
+    .then(() => console.log('component response'));
 }
 
 function validateEmail(email) {
@@ -306,11 +360,14 @@ function loadFormEvents() {
     size.onchange = updatePriceEvent;
   }
 
-  var docs =  document.getElementsByClassName('item-select');
-  if(!docs) return;
+  var items =  document.getElementsByClassName('item-select');
+  if(!items) return;
 
-  for(var i = 0; i < docs.length; i++) {
-    docs[i].onchange = updatePriceEvent;
+  for(var i = 0; i < items.length; i++) {
+    items[i].onchange = e => {
+      updateForm(e);
+      updatePriceEvent(e);
+    };
   }
 }
 
@@ -322,7 +379,7 @@ function setFormHTML(data) {
 function loadForm() {
   let json = JSON.parse(document.getElementsByClassName('sku')[0].innerText);
   let { productId, ...data } = json;
-  let url = `https://mktp.herokuapp.com/form/${productId}`;
+  let url = `http://localhost:3001/form/${productId}`;
 	axios({ 
       method: 'POST', 
       url, 
