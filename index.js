@@ -113,7 +113,7 @@ function clearPrice() {
 }
 
 function hideForm() {
-  state = { formVisible: false, ...state }
+  state = { ...state, formVisible: false,  }
   
   var orcamentoInputs = document.getElementsByClassName('orcamento-inputs');
   for(var i = 0; i < orcamentoInputs.length; i++){
@@ -165,7 +165,7 @@ function getUpdatedComponent(divElement, optionId, selectedItemId) {
 
 function updateForm(e) {
   e.preventDefault();
-  if (state.formVisible) return;
+  // if (state.formVisible) return;
   updatePriceEvent(e);
   if (e.target.className !== 'item-select') {
     console.log('evento chamado por outro elemento != item-select');
@@ -176,6 +176,7 @@ function updateForm(e) {
   var showUnitField = e.target.children[e.target.selectedIndex].getAttribute('_showunitfield');
   var optionId = e.target.children[e.target.selectedIndex].getAttribute('_optionid');
   var selectedItemId = e.target.children[e.target.selectedIndex].getAttribute('id');
+
   console.log('selectedItemId', selectedItemId);
   console.log('showUnitField', showUnitField);
   
@@ -188,8 +189,8 @@ function updateForm(e) {
       selectedDiv.onchange = e => {
       updateForm(e);
     }
+    loadInputEvents();
   });
-  loadInputEvents();
 }
 
 function validateEmail(email) {
@@ -396,8 +397,8 @@ function loadInputEvents() {
       let itemId = e.target.getAttribute('_itemid');
       console.log('itemId', itemId);
       state.json.defaultItems[itemId] = {
+        ...state.json.defaultItems[itemId],
         quantity: e.target.value,
-        ...state.json.defaultItems[itemId]
       };
       console.log('state', state);
       updateForm(e);
@@ -412,8 +413,8 @@ function loadInputEvents() {
       let itemId = e.target.getAttribute('_itemid');
       console.log('itemId', itemId);
       state.json.defaultItems[itemId] = {
+        ...state.json.defaultItems[itemId],
         x: e.target.value,
-        ...state.json.defaultItems[itemId]
       };
       console.log('state', state);
       updateForm(e);
@@ -428,8 +429,8 @@ function loadInputEvents() {
       let itemId = e.target.getAttribute('_itemid');
       console.log('itemId', itemId);
       state.json.defaultItems[itemId] = {
-        y: e.target.value,
         ...state.json.defaultItems[itemId],
+        y: e.target.value,
       };
       console.log('state', state);
       updateForm(e);
