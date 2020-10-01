@@ -32,7 +32,8 @@ function getDataRequest() {
 }
 
 function updatePriceRequest() {
-  var url = 'http://localhost:3001/form/quote';
+  var url = 'https://mktp.herokuapp.com/form/quote';
+
   console.log('updatePriceRequest', url);
   let { defaultItems, ...rest } = state.json;
   let data = { defaultItems, ...getDataRequest() };
@@ -155,7 +156,7 @@ function getUpdatedComponent(divElement, optionId, selectedItemId) {
     itemsId,
     defaultItems
   };
-  let url = `http://localhost:3001/form/select`;
+  let url = `https://mktp.herokuapp.com/form/select`;
 	return axios({ 
     method: 'POST', 
     url, 
@@ -443,9 +444,15 @@ function setFormHTML(data) {
 	return data;
 }
 
+function fetchQuoteWhenHasCookie() {
+  var hasFormCookie = getCookie('formCookie');
+  if (!hasFormCookie) return;
+  updatePriceRequest();
+}
+
 function loadForm() {
   let { productId, ...data } = state.json;
-  let url = `http://localhost:3001/form/${productId}`;
+  let url = `https://mktp.herokuapp.com/form/${productId}`;
 	axios({ 
       method: 'POST', 
       url, 
@@ -457,7 +464,8 @@ function loadForm() {
 		})
 		.then(res => res.data)
 		.then(setFormHTML)
-		.then(loadFormEvents);
+    .then(loadFormEvents)
+    .then(fetchQuoteWhenHasCookie);
 }
 
 function createState() {
