@@ -57,7 +57,7 @@ function updatePriceRequest() {
 }
 
 function setCookie(name, value) {
-  var cookie = name + "=" + escape(value);
+  var cookie = name + "=" + escape(value) + '; path=/';
   document.cookie = cookie;
 }
 
@@ -352,6 +352,7 @@ function loadFormEvents() {
         error = true;
       }
       if (erro) return;
+      hideRequiredText();
       hideForm();
       setUserFormData();
       updatePriceRequest();
@@ -444,9 +445,27 @@ function setFormHTML(data) {
 	return data;
 }
 
+function hideRequiredText () {
+  document.getElementById('info-fill-form').style.display = 'none';
+}
+
+function setDefaultPrice(data) {
+  document.getElementsByClassName('elementor-widget-woocommerce-product-price')[0].children[0].children[0].innerText = `R$ --,--`;
+  return data;
+}
+
+function hideRequiredTextOnload (data) {
+  var hasFormCookie = getCookie('formCookie');
+  if (hasFormCookie) {
+    hideRequiredText();
+  }
+  return data;
+}
+
 function fetchQuoteWhenHasCookie() {
   var hasFormCookie = getCookie('formCookie');
   if (!hasFormCookie) return;
+  hideRequiredText();
   updatePriceRequest();
 }
 
@@ -462,8 +481,10 @@ function loadForm() {
 			console.log(res);
 			return res;
 		})
-		.then(res => res.data)
-		.then(setFormHTML)
+    .then(res => res.data)
+    .then(setDefaultPrice)
+    .then(setFormHTML)
+    .then(hideRequiredTextOnload)
     .then(loadFormEvents)
     .then(fetchQuoteWhenHasCookie);
 }
