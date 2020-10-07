@@ -1,3 +1,5 @@
+let apiUrl = 'http://localhost:3001';
+
 function getDataRequest() {
   var quantity = document.getElementById('quantity-select').value;
   var productName = document.getElementsByClassName('product_title entry-title elementor-heading-title elementor-size-default')[0].innerText;
@@ -32,7 +34,7 @@ function getDataRequest() {
 }
 
 function updatePriceRequest() {
-  var url = 'https://mktp.herokuapp.com/form/quote';
+  var url = apiUrl + '/form/quote';
 
   console.log('updatePriceRequest', url);
   let { defaultItems, ...rest } = state.json;
@@ -156,7 +158,7 @@ function getUpdatedComponent(divElement, optionId, selectedItemId) {
     itemsId,
     defaultItems
   };
-  let url = `https://mktp.herokuapp.com/form/select`;
+  let url = `${apiUrl}/form/select`;
 	return axios({ 
     method: 'POST', 
     url, 
@@ -187,11 +189,12 @@ function updateForm(e) {
     .then(res => res.data.html)
     .then(html => selectedDiv.innerHTML = html)
     .then(() => {
-      selectedDiv.onchange = e => {
-      updateForm(e);
-    }
-    loadInputEvents();
-  });
+        selectedDiv.onchange = e => {
+        updateForm(e);
+      }
+      loadInputEvents();
+    })
+    .then(updatePriceRequest);
 }
 
 function validateEmail(email) {
@@ -471,7 +474,7 @@ function fetchQuoteWhenHasCookie() {
 
 function loadForm() {
   let { productId, ...data } = state.json;
-  let url = `https://mktp.herokuapp.com/form/${productId}`;
+  let url = `${apiUrl}/form/${productId}`;
 	axios({ 
       method: 'POST', 
       url, 
