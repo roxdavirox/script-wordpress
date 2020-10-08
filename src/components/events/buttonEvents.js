@@ -1,13 +1,13 @@
 import { emailIsValid, nameIsValid, phoneIsValid} from '../../utils/validations';
-import { hideForm, hideRequiredText, showError } from '../form';
+import { hideForm, hideRequiredText, showError, setUserFormData } from '../form';
 
 export const loadButtonEvents = (props) => {
   console.log('[loadButtonEvents]');
-  const { setState, getState } = props;
   var button = document.getElementById('ver-preco-button');
   if (button) {
     button.onclick = function onClick(e) {
       e.preventDefault();
+      const { setState, getState } = props;
       console.log('[onButtonClick]');
       setState({ erro: false });
       if (!emailIsValid()){
@@ -29,7 +29,7 @@ export const loadButtonEvents = (props) => {
       if (erro) return;
       hideRequiredText(props);
       hideForm(props);
-      // setUserFormData();
+      setUserFormData(props);
       // updatePriceRequest();
       window.scrollTo(0, 0);
     }
