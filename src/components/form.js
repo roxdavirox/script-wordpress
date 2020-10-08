@@ -2,7 +2,12 @@ import {
   getFormCookie,
   getUserName,
   getUserPhone,
-  getUserEmail
+  getUserEmail,
+
+  setUserName,
+  setUserPhone,
+  setUserEmail,
+  setFormCookie
 } from '../services/cookieService';
 import { loadEvents } from './events/formEvents';
 
@@ -44,7 +49,7 @@ export const hideForm = (props) => {
   const { setState } = props;
   setState({ formVisible: false });
   var formInputs = document.getElementsByClassName('orcamento-inputs');
-  for(var i = 0; i < orcamentoInputs.length; i++){
+  for(var i = 0; i < formInputs.length; i++){
     formInputs[i].style.display = 'none';
   }
   return props;
@@ -93,5 +98,17 @@ export const loadFormEvents = (props) => {
     loadUserFormData(props);
   }
   loadEvents(props);
+  return props;
+}
+
+export const setUserFormData = props => {
+  console.log('[setUserFormData]');
+  var name = document.getElementById('name').value;
+  var phone = document.getElementById('phone').value;
+  var email = document.getElementById('email').value;
+  setUserName(name);
+  setUserPhone(phone);
+  setUserEmail(email);
+  setFormCookie(true);
   return props;
 }

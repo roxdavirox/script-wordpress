@@ -1,4 +1,4 @@
-export const getCookie = name => {
+export function getCookie(name) {
   var cookies = document.cookie;
   var prefix = name + "=";
   var begin = cookies.indexOf("; " + prefix);
@@ -24,7 +24,7 @@ export const getCookie = name => {
   return unescape(cookies.substring(begin + prefix.length, end));
 }
 
-export const setCookie = (name, value) => {
+export function setCookie(name, value) {
   var cookie = name + "=" + escape(value) + '; path=/';
   document.cookie = cookie;
 }
