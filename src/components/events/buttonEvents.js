@@ -1,5 +1,5 @@
 import { emailIsValid, nameIsValid, phoneIsValid} from '../../utils/validations';
-import { hideForm, hideRequiredText, showError, setUserFormData } from '../form';
+import { hideForm, hideRequiredText, showError, setUserFormData, updatePrice } from '../form';
 
 export const loadButtonEvents = (props) => {
   console.log('[loadButtonEvents]');
@@ -30,7 +30,8 @@ export const loadButtonEvents = (props) => {
       hideRequiredText(props);
       hideForm(props);
       setUserFormData(props);
-      // updatePriceRequest();
+      updatePrice(props);
+      // updatePriceRequest(); # TODO
       window.scrollTo(0, 0);
     }
   }

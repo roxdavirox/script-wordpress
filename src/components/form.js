@@ -10,6 +10,8 @@ import {
   setFormCookie
 } from '../services/cookieService';
 import { loadEvents } from './events/formEvents';
+import { formatPrice } from '../utils/price';
+import { getPrice } from '../services/formService';
 
 export const getJsonRequest = (props) => {
   console.log('[getJsonRequest] props', props);
@@ -19,6 +21,42 @@ export const getJsonRequest = (props) => {
   const jsonData = JSON.parse(innerText);
   setState({ json: jsonData });
   return props;
+}
+
+export const getFormDataRequest = props => {
+  const quantity = document.getElementById('quantity-select').value;
+  const productName = document.getElementsByClassName('product_title entry-title elementor-heading-title elementor-size-default')[0].innerText;
+  const sizeSelect = document.getElementById('size-select');
+
+  if(sizeSelect) {
+    var size = JSON.parse(sizeSelect.children[sizeSelect.selectedIndex].getAttribute('_size'));
+  }
+
+  const items = document.getElementsByClassName('item-select');
+  var itemsId = [];
+  for(var i = 0; i < items.length; i++) {
+    itemsId.push(items[i].children[items[i].selectedIndex].id);
+  }
+  
+  var name = document.getElementById('name').value;
+  var email = document.getElementById('email').value;
+  var phone = document.getElementById('phone').value;
+  var person = {
+    name,
+    email,
+    phone
+  };
+  
+  console.log('quantity', quantity)
+  console.log('size', size);
+  console.log('itemsId', itemsId);
+
+  const formDataRequest = { quantity, size, itemsId, person, productName };
+  console.log('formDataRequest', formDataRequest);
+  return {
+    ...props,
+    formDataRequest
+  };
 }
 
 export const injectHtmlForm = (props) => {
@@ -110,5 +148,22 @@ export const setUserFormData = props => {
   setUserPhone(phone);
   setUserEmail(email);
   setFormCookie(true);
+  return props;
+}
+
+export const updatePrice = async props => {
+  console.log('[updatePrice]');
+  const { quote } = await getPrice(props);
+  const { setState } = props;
+  setState({
+    totalPrice: quote.price,
+    unitPrice: quote.unitPrice
+  });
+  const total = formatPrice(quote.price);
+  const unitPrice = formatPrice(quote.unitPrice);
+  document.getElementsByClassName('elementor-widget-woocommerce-product-price')[0]
+    .children[0]
+    .children[0]
+    .innerText = `${total} (${unitPrice}/unit)`;
   return props;
 }

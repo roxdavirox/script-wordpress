@@ -1,4 +1,5 @@
 import { post } from './api';
+import { getFormDataRequest } from '../components/form';
 
 export const getHtmlForm = async (props) => {
   const { getState } = props;
@@ -10,5 +11,22 @@ export const getHtmlForm = async (props) => {
   return {
     ...props,
     html: response.html
+  }
+}
+
+export const getPrice = async (props) => {
+  const { getState } = props;
+  const { json } = getState();
+  const { defaultItems } = json;
+  const { formDataRequest } = getFormDataRequest(props);
+  const data = {
+    defaultItems, 
+    ...formDataRequest
+  }
+  const response = await post(`/form/quote`)(data);
+  console.log('[getPrice] response', response);
+  return {
+    ...props,
+    quote: response
   }
 }
