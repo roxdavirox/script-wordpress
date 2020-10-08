@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   formVisible: true,
   unitPrice: 0,
   totalPrice: 0,
+  erro: false,
 };
 
 export const createState = (initialState = INITIAL_STATE) => {
