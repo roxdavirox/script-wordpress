@@ -1,13 +1,14 @@
 import { emailIsValid, nameIsValid, phoneIsValid} from '../../utils/validations';
-import { hideForm, hideRequiredText } from '../form';
+import { hideForm, hideRequiredText, showError } from '../form';
 
 export const loadButtonEvents = (props) => {
   console.log('[loadButtonEvents]');
   const { setState, getState } = props;
   var button = document.getElementById('ver-preco-button');
   if (button) {
-    button.onclick = function(e) {
+    button.onclick = function onClick(e) {
       e.preventDefault();
+      console.log('[onButtonClick]');
       setState({ erro: false });
       if (!emailIsValid()){
         console.log('email invalido');

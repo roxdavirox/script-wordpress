@@ -50,6 +50,15 @@ export const hideForm = (props) => {
   return props;
 }
 
+export const showError = (id) => {
+  var email = document.getElementById(id);
+  email.style.display = 'contents';
+
+  setTimeout(() => {
+    hideError(id)
+  }, 3000);
+}
+
 export function loadUserFormData(props) {
   console.log('[loadUserFormData]');
 
@@ -83,6 +92,6 @@ export const loadFormEvents = (props) => {
     hideForm(props);
     loadUserFormData(props);
   }
-  loadEvents();
+  loadEvents(props);
   return props;
 }
