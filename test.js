@@ -1,0 +1,1 @@
+export const OlaMundo = () => console.log('Ola denovo');
