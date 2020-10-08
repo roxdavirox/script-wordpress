@@ -167,3 +167,11 @@ export const updatePrice = async props => {
     .innerText = `${total} (${unitPrice}/unit)`;
   return props;
 }
+
+export const clearPrice = props => {
+  document.getElementsByClassName('elementor-widget-woocommerce-product-price')[0]
+    .children[0]
+    .children[0]
+    .innerText = `Calculando...`;
+  return props;
+}
