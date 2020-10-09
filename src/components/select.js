@@ -3,7 +3,7 @@ import { getDivByOptionId } from '../utils/dom';
 import { loadItemSelectEvents } from './events/itemSelectEvents';
 import { loadInputEvents } from './events/inputEvents';
 import { updatePrice } from './form';
-import { compose } from '../utils/compose';
+import { pipe } from '../utils/pipe';
 
 export const getItemsId = (optionId) => {
   console.log('[getItemsId]');
@@ -33,13 +33,10 @@ export const updateComponent = props => async (optionId, selectedItemId) => {
   };
 
   const response = await getUpdatedComponent(dataRequest);
-  const fns = [
-    updatePrice,
-    loadItemSelectEvents,
-    loadInputEvents
-  ].reverse();
-
-  compose(fns)(props);
+  await updatePrice(props);
+  pipe(props)
+    .then(loadItemSelectEvents)
+    .then(loadInputEvents);
 
   return {
     ...props,

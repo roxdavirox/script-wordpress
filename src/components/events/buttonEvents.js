@@ -1,6 +1,5 @@
 import { emailIsValid, nameIsValid, phoneIsValid} from '../../utils/validations';
 import { hideForm, hideRequiredText, showError, setUserFormData, updatePrice } from '../form';
-import { compose } from '../../utils/compose';
 
 export const loadButtonEvents = (props) => {
   console.log('[loadButtonEvents]');
@@ -29,14 +28,10 @@ export const loadButtonEvents = (props) => {
       const { erro } = getState();
       if (erro) return;
 
-      const fns = [
-        hideRequiredText,
-        hideForm,
-        setUserFormData,
-        updatePrice
-      ].reverse();
-
-      compose(fns)(props);
+      hideRequiredText(props);
+      hideForm(props);
+      setUserFormData(props);
+      updatePrice(props);
 
       window.scrollTo(0, 0);
     }
