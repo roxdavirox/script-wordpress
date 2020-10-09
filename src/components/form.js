@@ -35,7 +35,7 @@ export const getFormDataRequest = props => {
   const items = document.getElementsByClassName('item-select');
   var itemsId = [];
   for(var i = 0; i < items.length; i++) {
-    itemsId.push(items[i].children[items[i].selectedIndex].id);
+    itemsId.push(items[i].children[items[i].selectedIndex].getAttribute('_itemid'));
   }
   
   var name = document.getElementById('name').value;
