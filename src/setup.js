@@ -9,20 +9,22 @@ import {
   updatePrice
 } from './components/form';
 
-const configureState = (state, document) => new Promise((resolve) => {
-  console.log('[configureState]', state);
-  resolve({ ...state, document });
-});
+const compose = (...fns) => fns.reduce((f, g) => (...args) => f(g(...args)))
+
+const configureState = (state) => new Promise(resolve => resolve(state));
 
 export const start = () => {
   console.log('[start]');
   const state = createState();
-  configureState(state, document)
-    .then(getJsonRequest)
-    .then(setDefaultPrice)
-    .then(hideRequiredText)
-    .then(getHtmlForm)
-    .then(injectHtmlForm)
-    .then(loadFormEvents)
-    .then(updatePrice);
+  const setupStart = compose(
+    configureState(state, document),
+    getJsonRequest,
+    setDefaultPrice,
+    hideRequiredText,
+    getHtmlForm,
+    injectHtmlForm,
+    loadFormEvents,
+    updatePrice
+  );
+  setupStart();
 }
