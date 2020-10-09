@@ -13,8 +13,8 @@ export const onItemChange = props => async e => {
   const { html } = await updateComponent(props)(optionId, selectedItemId);
   const div = getDivByOptionId(optionId);
   div.innerHTML = html;
-  loadItemSelectEvents(props);
-  loadInputEvents(props);
+  const compose = f => g => x => f(g(x));
+  compose(loadItemSelectEvents)(loadInputEvents)(props);
 }
 
 export const loadItemSelectEvents = props => {

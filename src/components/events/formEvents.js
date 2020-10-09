@@ -8,13 +8,16 @@ import { compose } from '../../utils/compose';
 
 export const loadEvents = (props) => {
   console.log('[loadEvents]');
-  compose([
+  const fns = [
     loadPhoneEvents,
     loadButtonEvents,
     loadQuantityEvents,
     loadSizeEvents,
     loadItemSelectEvents,
     loadInputEvents
-  ])(props);
+  ].reverse();
+
+  compose(fns)(props);
+  
   return props;
 }
