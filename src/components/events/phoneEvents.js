@@ -1,6 +1,6 @@
 import { clearPhone, formatPhone } from '../../utils/phone';
 
-export const loadPhoneEvents = () => {
+export const loadPhoneEvents = (props) => {
   console.log('[loadPhoneEvents]');
   const inputPhone = document.getElementById('phone');
 
@@ -29,4 +29,6 @@ export const loadPhoneEvents = () => {
       inputPhone.value = formatPhone(v, '(##) ####-####');
     }
   }
+
+  return props;
 }

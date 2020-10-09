@@ -31,7 +31,6 @@ export const loadButtonEvents = (props) => {
       hideForm(props);
       setUserFormData(props);
       updatePrice(props);
-      // updatePriceRequest(); # TODO
       window.scrollTo(0, 0);
     }
   }

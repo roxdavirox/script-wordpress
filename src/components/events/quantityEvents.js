@@ -4,7 +4,7 @@ import { updatePrice, clearPrice } from '../form';
 export const loadQuantityEvents = props => {
   console.log('[loadQuantityEvents]');
   const quantity = document.getElementById('quantity-select');
-  if (!quantity) return;
+  if (!quantity) return props;
 
   quantity.onchange = debounce(() => {
     const { getState } = props;
@@ -13,4 +13,6 @@ export const loadQuantityEvents = props => {
     clearPrice(props);
     updatePrice(props);
   }, 450);
+
+  return props;
 }

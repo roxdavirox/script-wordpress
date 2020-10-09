@@ -3,7 +3,7 @@ import { debounce } from '../../utils/debounce';
 
 export const loadSizeEvents = props => {
   const size = document.getElementById('size-select');
-  if (!size) return;
+  if (!size) return props;
 
   size.onchange = debounce(() => {
     const { getState } = props;
@@ -12,4 +12,6 @@ export const loadSizeEvents = props => {
     clearPrice(props);
     updatePrice(props);
   });
+
+  return props;
 }
