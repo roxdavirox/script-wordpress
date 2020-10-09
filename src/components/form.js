@@ -15,7 +15,7 @@ import { getPrice } from '../services/formService';
 
 export const getJsonRequest = (props) => {
   console.log('[getJsonRequest] props', props);
-  const { document, setState } = props;
+  const { setState } = props;
   const [json] = document.getElementsByClassName('sku');
   const { innerText } = json;
   const jsonData = JSON.parse(innerText);
@@ -60,7 +60,7 @@ export const getFormDataRequest = props => {
 }
 
 export const injectHtmlForm = (props) => {
-  const { document, html } = props;
+  const { html } = props;
   document.getElementById('form-container').innerHTML = html;
   return props
 }
