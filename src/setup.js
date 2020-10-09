@@ -5,7 +5,8 @@ import {
   getJsonRequest,
   setDefaultPrice,
   hideRequiredText,
-  loadFormEvents
+  loadFormEvents,
+  updatePrice
 } from './components/form';
 
 const configureState = (state, document) => new Promise((resolve) => {
@@ -23,4 +24,5 @@ export const start = () => {
     .then(getHtmlForm)
     .then(injectHtmlForm)
     .then(loadFormEvents)
+    .then(updatePrice);
 }
