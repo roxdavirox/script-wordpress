@@ -8,8 +8,7 @@ import {
   loadFormEvents,
   updatePrice
 } from './components/form';
-
-const compose = (fns) => input => fns.reduceRight((f, g) => f.then(g), Promise.resolve(input));
+import { compose } from './utils/compose';
 
 export const start = async () => {
   console.log('[start]');
