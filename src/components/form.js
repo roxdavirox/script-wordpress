@@ -60,6 +60,7 @@ export const getFormDataRequest = props => {
 }
 
 export const injectHtmlForm = (props) => {
+  console.log('[injectHtmlForm]');
   const { html } = props;
   document.getElementById('form-container').innerHTML = html;
   return props
