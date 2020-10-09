@@ -1,7 +1,9 @@
 import { getUpdatedComponent } from '../services/selectService';
 import { getDivByOptionId } from '../utils/dom';
 import { loadItemSelectEvents } from './events/itemSelectEvents';
+import { loadInputEvents } from './events/inputEvents';
 import { updatePrice } from './form';
+import { compose } from '../utils/compose';
 
 export const getItemsId = (optionId) => {
   console.log('[getItemsId]');
@@ -29,9 +31,15 @@ export const updateComponent = props => async (optionId, selectedItemId) => {
     itemsId,
     defaultItems
   };
+
   const response = await getUpdatedComponent(dataRequest);
-  await updatePrice(props);
-  loadItemSelectEvents(props);
+
+  compose([
+    updatePrice,
+    loadItemSelectEvents,
+    loadInputEvents
+  ])(props);
+
   return {
     ...props,
     html: response.html
