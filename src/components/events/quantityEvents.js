@@ -1,18 +1,20 @@
-import { debounce } from '../../utils/debounce';
 import { updatePrice, clearPrice } from '../form';
 
 export const loadQuantityEvents = props => {
   console.log('[loadQuantityEvents]');
-  const quantity = document.getElementById('quantity-select');
+  var quantity = document.getElementById('quantity-select');
   if (!quantity) return props;
 
-  quantity.onchange = debounce(() => {
+  quantity.onchange = function onChange(e) {
+    e.preventDefault();
+    console.log('[loadQuantityEvents] onchange');
+    console.log('[loadQuantityEvents] props', props);
     const { getState } = props;
     const { formVisible } = getState();
+    console.log('[loadQuantityEvents] formVisible', formVisible);
     if (formVisible) return;
     clearPrice(props);
     updatePrice(props);
-  }, 450);
-
+  }
   return props;
 }
