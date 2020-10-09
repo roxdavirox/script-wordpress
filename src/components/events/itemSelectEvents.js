@@ -1,5 +1,6 @@
 import { getDivByOptionId } from '../../utils/dom';
 import { updateComponent } from '../select';
+import { loadInputEvents } from './inputEvents';
 
 export const onItemChange = props => async e => {
   e.preventDefault();
@@ -13,6 +14,7 @@ export const onItemChange = props => async e => {
   const div = getDivByOptionId(optionId);
   div.innerHTML = html;
   loadItemSelectEvents(props);
+  loadInputEvents(props);
 }
 
 export const loadItemSelectEvents = props => {
