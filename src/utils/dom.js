@@ -1,10 +1,12 @@
 export function getDivByOptionId(optionId) {
   console.log('[getDivByOptionId]');
-  var divs = document.querySelectorAll('[_optionid]');
-  
-  for(var i = 0; i < divs.length; i++) {
-    if (divs[i].getAttribute('_optionid') === optionId) 
-      return divs[i];
+  var containers = document.querySelectorAll('[id=item-container]');
+  console.log('[getDivByOptionId] containers', containers);
+  for(var i = 0; i < containers.length; i++) {
+    if (containers[i].getAttribute('_optionid') === optionId) {
+      console.log('[getDivByOptionId] container selecionado', containers[i]);
+      return containers[i];
+    }
   }
   return false;
 }
