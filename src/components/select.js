@@ -1,5 +1,7 @@
 import { getUpdatedComponent } from '../services/selectService';
 import { getDivByOptionId } from '../utils/dom';
+import { loadItemSelectEvents } from './events/itemSelectEvents';
+import { updatePrice } from './form';
 
 export const getItemsId = (optionId) => {
   console.log('[getItemsId]');
@@ -10,7 +12,7 @@ export const getItemsId = (optionId) => {
 
   const itemsId = [];
   for(var i = 0; i < selectChildren.children.length; i++) {
-    itemsId.push(selectChildren.children[i].getAttribute('id'));
+    itemsId.push(selectChildren.children[i].getAttribute('_itemid'));
   }
 
   return itemsId
@@ -19,7 +21,7 @@ export const getItemsId = (optionId) => {
 export const updateComponent = props => async (optionId, selectedItemId) => {
   console.log('[updateComponent]');
   const { getState } = props;
-  const { defaultItems } = getState();
+  const { json: { defaultItems } } = getState();
   const itemsId = getItemsId(optionId);
   const dataRequest = {
     optionId,
@@ -28,6 +30,8 @@ export const updateComponent = props => async (optionId, selectedItemId) => {
     defaultItems
   };
   const response = await getUpdatedComponent(dataRequest);
+  await updatePrice(props);
+  loadItemSelectEvents(props);
   return {
     ...props,
     html: response.html
