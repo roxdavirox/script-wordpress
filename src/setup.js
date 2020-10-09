@@ -8,18 +8,16 @@ import {
   loadFormEvents,
   updatePrice
 } from './components/form';
-import { compose } from './utils/compose';
+import { pipe } from './utils/pipe';
 
 export const start = async () => {
   console.log('[start]');
-  compose([
-    getJsonRequest,
-    setDefaultPrice,
-    hideRequiredText,
-    getHtmlForm,
-    injectHtmlForm,
-    loadFormEvents,
-    updatePrice
-  ].reverse()
-  )(createState());
+  pipe(createState())
+    .then(getJsonRequest)
+    .then(setDefaultPrice)
+    .then(hideRequiredText)
+    .then(getHtmlForm)
+    .then(injectHtmlForm)
+    .then(updatePrice)
+    .then(loadFormEvents);
 }
