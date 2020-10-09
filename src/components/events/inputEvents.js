@@ -23,7 +23,6 @@ export const loadInputEvents = props => {
       };
       setState({ json: newJson });
       console.log('state', state);
-      // updateForm(e);
       updatePrice(props);
     }
   }

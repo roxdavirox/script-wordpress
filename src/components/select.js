@@ -33,12 +33,13 @@ export const updateComponent = props => async (optionId, selectedItemId) => {
   };
 
   const response = await getUpdatedComponent(dataRequest);
-
-  compose([
+  const fns = [
     updatePrice,
     loadItemSelectEvents,
     loadInputEvents
-  ])(props);
+  ].reverse();
+
+  compose(fns)(props);
 
   return {
     ...props,
