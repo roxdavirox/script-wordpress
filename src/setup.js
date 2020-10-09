@@ -9,15 +9,11 @@ import {
   updatePrice
 } from './components/form';
 
-const compose = (...fns) => fns.reduce((f, g) => (...args) => f(g(...args)))
+const compose = (fns) => input => fns.reduceRight((f, g) => f.then(g), Promise.resolve(input));
 
-const configureState = (state) => new Promise(resolve => resolve(state));
-
-export const start = () => {
+export const start = async () => {
   console.log('[start]');
-  const state = createState();
-  const setupStart = compose(
-    configureState(state, document),
+  compose([
     getJsonRequest,
     setDefaultPrice,
     hideRequiredText,
@@ -25,6 +21,6 @@ export const start = () => {
     injectHtmlForm,
     loadFormEvents,
     updatePrice
-  );
-  setupStart();
+  ].reverse()
+  )(createState());
 }
