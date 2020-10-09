@@ -20,11 +20,12 @@ export const onItemChange = props => async e => {
 export const loadItemSelectEvents = props => {
   console.log('[loadItemSelectEvents]');
   const items =  document.getElementsByClassName('item-select');
-  if(!items) return;
+  if(!items) return props;
 
   for(var i = 0; i < items.length; i++) {
     items[i].onchange = async function onChange(e) {
       await onItemChange(props)(e);
     }
   }
+  return props;
 }
