@@ -2,6 +2,7 @@ import { post } from './api';
 import { getFormDataRequest } from '../components/form';
 
 export const getHtmlForm = async (props) => {
+  console.log('[getHtmlForm]');
   const { getState } = props;
   const { json } = getState();
   const { productId, ...dataRequest } = json
@@ -15,6 +16,7 @@ export const getHtmlForm = async (props) => {
 }
 
 export const getPrice = async (props) => {
+  console.log('[getPrice]');
   const { getState } = props;
   const { json } = getState();
   const { defaultItems } = json;
