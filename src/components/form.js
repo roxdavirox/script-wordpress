@@ -154,6 +154,8 @@ export const setUserFormData = props => {
 
 export const updatePrice = async props => {
   console.log('[updatePrice]');
+  var hasFormCookie = getFormCookie();
+  if (!hasFormCookie && hasFormCookie !== 'true') return props;
   const { quote } = await getPrice(props);
   const { setState } = props;
   setState({
