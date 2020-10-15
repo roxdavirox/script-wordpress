@@ -16,7 +16,7 @@ export const loadInputEvents = props => {
       const newJson = { ...json, defaultItems: { 
           ...json.defaultItems,
           [itemId]: {
-            ...json.defaultItems,
+            ...json.defaultItems[itemId],
             quantity: e.target.value
           }
         }
@@ -42,7 +42,7 @@ export const loadInputEvents = props => {
       const newJson = { ...json, defaultItems: { 
           ...json.defaultItems,
           [itemId]: {
-            ...json.defaultItems,
+            ...json.defaultItems[itemId],
             x: e.target.value
           }
         }
