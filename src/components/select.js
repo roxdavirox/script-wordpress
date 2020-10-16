@@ -20,7 +20,7 @@ export const getItemsId = (optionId) => {
   return itemsId
 }
 
-export const updateComponent = props => async (optionId, selectedItemId) => {
+export const updateComponent = props => async (optionId, selectedItemId, prevItem) => {
   console.log('[updateComponent]');
   const { getState } = props;
   const { json: { defaultItems } } = getState();
@@ -28,6 +28,7 @@ export const updateComponent = props => async (optionId, selectedItemId) => {
   const dataRequest = {
     optionId,
     selectedItemId,
+    prevItem,
     itemsId,
     defaultItems
   };
