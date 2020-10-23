@@ -60,7 +60,7 @@ export const loadItemSelectEvents = props => {
     };
     const updatedJson = {
       ...json,
-      ...defaultItems
+      defaultItems
     };
     setState({
       selectedItems: {

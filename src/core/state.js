@@ -7,7 +7,8 @@ const INITIAL_STATE = {
   unitPrice: 0,
   totalPrice: 0,
   erro: false,
-  selectedItems: {}
+  selectedItems: {},
+  json: { defaultItems: {} }
 };
 
 export const createState = (initialState = INITIAL_STATE) => {
