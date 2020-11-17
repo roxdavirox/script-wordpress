@@ -41,10 +41,6 @@ export const updateComponent = props => async (optionId, selectedItemId, prevIte
   console.log('[updateComponent] dataRequest', dataRequest);
 
   const response = await getUpdatedComponent(dataRequest);
-  await updatePrice(props);
-  pipe(props)
-    .then(loadItemSelectEvents)
-    .then(loadInputEvents);
 
   return {
     ...props,

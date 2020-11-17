@@ -1,6 +1,8 @@
 import { getDivByOptionId } from '../../utils/dom';
 import { updateComponent } from '../select';
 import { loadInputEvents } from './inputEvents';
+import { pipe } from '../../utils/pipe';
+import { updatePrice } from '../form';
 
 export const onItemChange = props => async e => {
   e.preventDefault();
@@ -24,8 +26,12 @@ export const onItemChange = props => async e => {
 
   const div = getDivByOptionId(optionId);
   div.innerHTML = html;
-  loadItemSelectEvents(props);
-  loadInputEvents(props);
+
+  pipe(props)
+    .then(loadItemSelectEvents)
+    .then(loadInputEvents)
+    .then(updatePrice);
+
 }
 
 export const loadItemSelectEvents = props => {
@@ -50,7 +56,7 @@ export const loadItemSelectEvents = props => {
     let y = 1;
     let quantity = 1;
     if (hasUnitField) { 
-      label = div.children[0].children[0].innerText;
+      label = div.children[1].children[0].innerText;
       console.log('[label]', label);
 
       let isSizeType = div.children[1].children[1].children[1] !== undefined;
@@ -72,6 +78,8 @@ export const loadItemSelectEvents = props => {
       ...json.defaultItems,
       [itemId]:  { quantity, x, y, label }
     };
+    console.log('defaultItems', defaultItems);
+
     const updatedJson = {
       ...json,
       defaultItems

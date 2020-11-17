@@ -21,6 +21,7 @@ export const createState = (initialState = INITIAL_STATE) => {
       ...store.state,
       ...props
     }
+    console.log('[change] state', store.state);
   }
   
   const getState = () => store.state;
