@@ -22,33 +22,39 @@ export const onItemChange = props => async e => {
 
 export const loadItemSelectEvents = props => {
   console.log('[loadItemSelectEvents]');
-  const items =  document.getElementsByClassName('item-select');
-  if(!items) return props;
+  const itemsSelect =  document.getElementsByClassName('item-select');
+  if(!itemsSelect) return props;
   const { setState, getState } = props;
 
-  for(var i = 0; i < items.length; i++) {
-    items[i].onchange = async function onChange(e) {
+  for(var i = 0; i < itemsSelect.length; i++) {
+    itemsSelect[i].onchange = async function onChange(e) {
       await onItemChange(props)(e);
     }
-    const optionId = items[i].id;
-    const selectedItem = items[i].children[items[i].selectedIndex];
+    const optionId = itemsSelect[i].id;
+    const selectedItem = itemsSelect[i].children[itemsSelect[i].selectedIndex];
     const itemId = selectedItem.getAttribute('_itemid');
     const div = getDivByOptionId(optionId);
-
+    console.log('[loadItemSelectEvents] div', div);
     let label = '';
-    const hasUnitField = div.children[0].children[1];
+    const hasUnitField = div.children[1] !== undefined && div.children[1].children[0] !== undefined;
+    console.log('[hasUnitField]', hasUnitField);
     let x = 1;
     let y = 1;
     let quantity = 1;
     if (hasUnitField) { 
-      label = div.children[0].children[1].children[0].innerText;
+      label = div.children[0].children[0].innerText;
+      console.log('[label]', label);
 
-      let isSizeType = div.children[0].children[1].children[1].children[1] !== undefined;
+      let isSizeType = div.children[1].children[1].children[1] !== undefined;
+      console.log('[size type] ', isSizeType);
       if (isSizeType) {
-        x = div.children[0].children[1].children[1].children[0].children[0].value
-        y = div.children[0].children[1].children[1].children[1].children[0].value
+        x = div.children[1].children[1].children[0].children[0].value
+        console.log('[x]', x);
+        y = div.children[1].children[1].children[1].children[0].value
+        console.log('[y]', y);
       } else {
-        quantity = div.children[0].children[1].children[1].value
+        quantity = div.children[1].children[1].children[0].value
+        console.log('[quantity]', quantity)
       }
     }
     const state = getState();
