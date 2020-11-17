@@ -10,7 +10,8 @@ export const getItemsId = (optionId) => {
   const div = getDivByOptionId(optionId);
   console.log('[getItemsId] div', div);
 
-  let selectChildren = div.children[0].children[0].children[1]
+  let selectChildren = div.children[0].children[1].children[0];
+  console.log('[getItemsId] selectChildren', selectChildren);
 
   const itemsId = [];
   for(var i = 0; i < selectChildren.children.length; i++) {
@@ -24,7 +25,11 @@ export const updateComponent = props => async (optionId, selectedItemId, prevIte
   console.log('[updateComponent]');
   const { getState } = props;
   const { json: { defaultItems } } = getState();
+  console.log('[updateComponent] default items', defaultItems);
+
   const itemsId = getItemsId(optionId);
+  console.log('[updateComponent] itemsId', itemsId);
+
   const dataRequest = {
     optionId,
     selectedItemId,
@@ -32,6 +37,8 @@ export const updateComponent = props => async (optionId, selectedItemId, prevIte
     itemsId,
     defaultItems
   };
+
+  console.log('[updateComponent] dataRequest', dataRequest);
 
   const response = await getUpdatedComponent(dataRequest);
   await updatePrice(props);
