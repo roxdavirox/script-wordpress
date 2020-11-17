@@ -5,15 +5,23 @@ import { loadInputEvents } from './inputEvents';
 export const onItemChange = props => async e => {
   e.preventDefault();
   console.log('[onItemChange]');
+  console.log('[e.target]', e.target);
   const { children, selectedIndex } = e.target;
   const child = children[selectedIndex];
+  console.log('[child]', child);
   const selectedItemId = child.getAttribute('_itemid');
+  console.log('[selectedItemId]', selectedItemId);
   const optionId = child.getAttribute('_optionid');
+  console.log('[optionId]', optionId);
   const { getState } = props;
   const { selectedItems } = getState();
-  const prevItem = selectedItems[optionId];
+  console.log('[selectedItems]', selectedItems);
 
+  const prevItem = selectedItems[optionId];
+  console.log('[prevItem]', prevItem);
   const { html } = await updateComponent(props)(optionId, selectedItemId, prevItem);
+  console.log('[html]', html);
+
   const div = getDivByOptionId(optionId);
   div.innerHTML = html;
   loadItemSelectEvents(props);
