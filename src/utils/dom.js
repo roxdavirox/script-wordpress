@@ -10,3 +10,7 @@ export function getDivByOptionId(optionId) {
   }
   return false;
 }
+
+export function getCurrentUrl() {
+  return document.location.href;
+}
